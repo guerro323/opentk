@@ -43,7 +43,7 @@ namespace OpenToolkit.Windowing.Common.Input
         {
             _hats = new Hat[hatCount];
             _axes = new float[axesCount];
-            _buttons = new byte[buttonCount / 8];
+            _buttons = new byte[(buttonCount / 8) + (buttonCount % 8 > 0 ? 1 : 0)];
             Id = id;
             Name = name;
         }
@@ -63,7 +63,7 @@ namespace OpenToolkit.Windowing.Common.Input
             Id = id;
             Name = name;
 
-            _buttons = new byte[buttons.Length / 8];
+            _buttons = new byte[(buttons.Length / 8) + (buttons.Length % 8 > 0 ? 1 : 0)];
             for (int i = 0; i < buttons.Length; i++)
             {
                 SetButtonDown(i, buttons[i]);
@@ -226,11 +226,11 @@ namespace OpenToolkit.Windowing.Common.Input
             }
 
             builder.Append("], buttons: [");
-            builder.Append(IsButtonDown(0) ? "down" : "up");
-            for (int i = 0; i < _buttons.Length * 8; i++)
+            builder.Append(IsButtonDown(0) ? "'down'" : "'up'");
+            for (int i = 1; i < _buttons.Length * 8; i++)
             {
                 builder.Append(", ");
-                builder.Append(IsButtonDown(0) ? "down" : "up");
+                builder.Append(IsButtonDown(i) ? "'down'" : "'up'");
             }
 
             builder.Append("], id: ");
